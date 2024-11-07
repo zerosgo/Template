@@ -1,0 +1,38 @@
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from datetime import datetime
+from io import StringIO
+import time
+import pymysql
+# import ssl
+
+# ssl._create_default_https_context = ssl._create_unverified_context
+
+# Selenium WebDriver 설정
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')  # 브라우저 창을 열지 않고 실행
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+
+# # Chrome 드라이버 실행
+# driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+driver_path = r'C:\Users\ys79.lee\.cache\selenium\chromedriver\win64\128.0.6613.137\chromedriver.exe'
+driver = webdriver.Chrome(service=Service(driver_path), options=options)
+
+
+# 크롤링할 웹 페이지 URL
+url = "https://comp.fnguide.com/SVO/WooriRenewal/Report.asp"
+
+# 페이지 열기
+driver.get(url)
+
+# 페이지가 로드될 시간을 기다림
+time.sleep(3)  # 페이지가 완전히 로드될 시간을 충분히 대기
+
+# 페이지 소스를 pandas로 읽어오기
+tables = pd.read_html(driver.page_source)
+
+driver.quit()
